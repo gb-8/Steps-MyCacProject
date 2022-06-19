@@ -1,0 +1,15 @@
+step "Hello World" {
+    package_requirement = "AfterPackageAcquisition"
+
+    action {
+        action_type = "hello-world"
+        properties = {
+            Octopus.Action.RunOnServer = "true"
+        }
+        step_package_version = "2.1.1"
+        worker_pool_variable = ""
+
+        inputs {
+        }
+    }
+}
