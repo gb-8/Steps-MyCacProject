@@ -13,3 +13,35 @@ step "run-a-script" {
         worker_pool = "hosted-windows"
     }
 }
+
+step "deploy-a-package" {
+    name = "Deploy a Package"
+    properties = {
+        Octopus.Action.TargetRoles = "my-package-role"
+    }
+
+    action {
+        action_type = "Octopus.TentaclePackage"
+        properties = {
+            Octopus.Action.CustomScripts.Deploy.ps1 = "echo Custom Script 2"
+            Octopus.Action.CustomScripts.PostDeploy.ps1 = "echo Custom Script 3"
+            Octopus.Action.CustomScripts.PreDeploy.ps1 = "echo Custom Script 1"
+            Octopus.Action.EnabledFeatures = "Octopus.Features.CustomScripts,Octopus.Features.ConfigurationVariables,Octopus.Features.ConfigurationTransforms"
+            Octopus.Action.Package.AutomaticallyRunConfigurationTransformationFiles = "True"
+            Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings = "True"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "public-nuget"
+            Octopus.Action.Package.PackageId = "MediatR"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "public-nuget"
+            package_id = "MediatR"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
